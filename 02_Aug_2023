@@ -1,0 +1,51 @@
+
+
+class Solution {
+    public int shortestDistance(int N, int M, int A[][], int X, int Y) {
+        // Check if the starting cell contains a 1
+        if (A[0][0] == 0) {
+            return -1; // If the starting cell contains 0, it is impossible to reach the destination.
+        }
+
+        // Initialize a queue for BFS and a visited array to keep track of visited cells
+        Queue<int[]> queue = new LinkedList<>();
+        boolean[][] visited = new boolean[N][M];
+
+        // Add the starting cell (0, 0) to the queue and mark it as visited
+        queue.add(new int[]{0, 0, 0}); // (x, y, distance)
+        visited[0][0] = true;
+
+        // Define directions for moving: up, down, left, right
+        int[] dx = {-1, 1, 0, 0};
+        int[] dy = {0, 0, -1, 1};
+
+        // Start BFS
+        while (!queue.isEmpty()) {
+            int[] current = queue.poll();
+            int x = current[0];
+            int y = current[1];
+            int distance = current[2];
+
+            // Check if the destination cell (X, Y) is reached
+            if (x == X && y == Y) {
+                return distance;
+            }
+
+            // Check all four directions
+            for (int k = 0; k < 4; k++) {
+                int nx = x + dx[k];
+                int ny = y + dy[k];
+
+                // Check if the new position is within the bounds of the matrix
+                if (nx >= 0 && nx < N && ny >= 0 && ny < M && !visited[nx][ny] && A[nx][ny] == 1) {
+                    // Add the new position to the queue and mark it as visited
+                    queue.add(new int[]{nx, ny, distance + 1});
+                    visited[nx][ny] = true;
+                }
+            }
+        }
+
+        // If no path is found to the destination cell (X, Y), return -1
+        return -1;
+    }
+}
